@@ -3,6 +3,10 @@
 # modeled after James Turnbull's processor for Zendesk
 # and his other processors at https://github.com/jamtur01/
 #
+# Modified from Don Johnson's version at
+# https://github.com/donjohnson/puppet-zenoss to support 
+# Zenoss v4 and fix a couple of small corner cases
+#
 require 'puppet'
 require 'yaml'
 require 'pp'
@@ -10,13 +14,13 @@ require 'pp'
 begin
   require "xmlrpc/client"
 rescue LoadError => e
-  Puppet.info "You need the `xmlrpc/client` library to use the snmp report"
+  Puppet.info "You need the `xmlrpc/client` library to use the zenoss report"
 end
 
 Puppet::Reports.register_report(:zenoss) do
 
   configfile = File.join([File.dirname(Puppet.settings[:config]), "zenoss.yaml"])
-  raise(Puppet::ParseError, "zendesk report config file #{configfile} not readable") unless File.exist?(configfile)
+  raise(Puppet::ParseError, "zenoss4puppet config file #{configfile} not readable") unless File.exist?(configfile)
   config = YAML.load_file(configfile)
   ZENOSS_USER        = config[:zenoss_user]
   ZENOSS_PASS        = config[:zenoss_pass]
