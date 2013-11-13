@@ -32,26 +32,15 @@ Puppet::Reports.register_report(:zenoss) do
 
 
   def process
-
-    failure = false
-
-    #iterate through each log object and look for failures
-    self.logs.each do |log|
-      if log.level.to_s == 'err' || 'alert' || 'emerg' || 'crit'
-        failure = true
-      end
-    end
-  
-    #note: in 2.6.5 and higher, you can scrub the above block and replace the following line with: if self.status == 'failed'
-    if failure == true
+    if self.status == 'failed'
       Puppet.debug "Creating Zenoss event for failed run on #{self.host}."
       event = {}
       output = []
       self.logs.each do |log|
         output << log
       end
-      url = "http://#{ZENOSS_USER}:#{ZENOSS_PASS}@#{ZENOSS_SERVER}:#{ZENOSS_XMLRPC_PORT}/zport/dmd/DeviceLoader"
-      server = XMLRPC::Client.new2( url )
+      #The new2 method breaks if our password contains certain special characters. Let's use regular new for compatibility..
+      server = XMLRPC::Client.new(ZENOSS_SERVER, "/zport/dmd/ZenEventManager", ZENOSS_XMLRPC_PORT, nil, nil, ZENOSS_USER, ZENOSS_PASS)
       event = {'device' => "#{self.host}", 
                'component' => "#{ZENOSS_COMPONENT}",
                'eventclass' => "#{ZENOSS_EVENTCLASS}", 
