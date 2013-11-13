@@ -7,6 +7,8 @@ Description
 A Puppet report handler for creating Zenoss events from failed runs to
 [zenoss](http://www.zenoss.com).  It includes sending all log data.
 
+This version is compatible with the API changes in Zenoss 4.x and later.
+
 Requirements
 ------------
 
@@ -19,13 +21,13 @@ Installation & Usage
 
 1.  Ensure you have the required gems installed on your Puppet Master.
 
-2.  Install puppet-zenoss as a module in your Puppet master's module
-    path.
+2.  Install puppet-zenoss as a module in your Puppet master module
+    path. (Default: /etc/puppet/modules)
 
 3.  Update the `zenoss_user`, `zenoss_pass`, `zenoss_server`, `zenoss_xmlrpc_port`, `zenoss_component`, and `zenoss_eventclass` variables 
-    in the `zenoss.yaml` file according to your Zenoss configuration. 
-    Copy the file to `/etc/puppet/`.
-    An example file is included.
+    in the `zenoss.yaml` file according to your Zenoss configuration. An example file is included.
+
+4.  Copy the file to `/etc/puppet/`.
 
 4.  Enable pluginsync and reports on your master and clients in `puppet.conf`
 
@@ -37,23 +39,26 @@ Installation & Usage
         report = true
         pluginsync = true
 
-5.  Run the Puppet client and sync the report as a plugin
+5.  Run the Puppet client and sync the report as a plugin.
 
 Author
 ------
 
-Don Johnson <auderive@gmail.com>
+Michael Parks <mparks@tkware.info>
 
 Acknowledgments
 ------
 
 Based on [puppet-zendesk](https://github.com/jamtur01/puppet-zendesk) by James Turnbull <james@lovedthanlost.net>, aka @kartar on Twitter. Thanks James!
 
+Further based on [puppet-zenoss](https://github.com/donjohnson/puppet-zenoss) by [Don Johnson](auderive@gmail.com) - in fact, most of this
+code is his, this version just consists of fixes and updates. Thanks for the neat tool, Don!
+
 License
 -------
 
-    Author:: Don Johnson <auderive@gmail.com>
-    Copyright:: Copyright (c) 2011 Don Johnson
+    Author:: Michael Parks <mparks@tkware.info>
+    Copyright:: Copyright (c) 2013 Michael Parks
     License:: Apache License, Version 2.0
 
     Licensed under the Apache License, Version 2.0 (the "License");
